@@ -48,13 +48,39 @@ class Game {
             this.playersGuess = num;
             console.log(this.checkGuess());
         }
+        
 
     }
 
 
     checkGuess() {
         this.pastGuesses.push(this.playersGuess);
-        return `guess: ${this.playersGuess} winning number ${this.winningNumber}`;
+
+        if (this.pastGuesses.length <= 5){
+            if (this.difference() <= 5) {
+                document.getElementById("feedback").innerHTML = "hot";
+                document.getElementById("guess_limit").innerHTML = `${this.pastGuesses.length}/5`;
+            }else {
+                document.getElementById("feedback").innerHTML = "cold";
+                document.getElementById("guess_limit").innerHTML = `${this.pastGuesses.length}/5`;
+            }
+    
+            if (this.playersGuess === this.winningNumber){
+                document.getElementById("guess_limit").innerHTML = `0/5`;
+                document.getElementById("feedback").innerHTML = "winner!";
+            }
+    
+            
+            else {
+                return `guess: ${this.playersGuess} winning number ${this.winningNumber}`;
+            }
+        }
+        else {
+            new Game();
+        }
+
+
+
     }
 
     newGame() {
@@ -74,8 +100,16 @@ class Game {
 
 let firstGame = new Game();
 
-firstGame.playersGuessSubmission(5);
-let guess = firstGame.checkGuess();
+document.getElementById("submit").addEventListener("click", function() {
+    firstGame.playersGuessSubmission(Number(document.getElementById('number').value));
+
+  });
+
+  document.getElementById("hint").addEventListener("click", function() {
+    document.getElementById("feedback").innerHTML = firstGame.provideHint();
+
+  });
+
 
 // console.log(firstGame.winningNumber);
 // console.log(difference);
